@@ -1,0 +1,264 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Health Chatbot</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=League+Spartan:wght@100..900&display=swap" rel="stylesheet">
+    <style>
+      body {
+        font-family: "League Spartan", serif;
+        font-optical-sizing: auto;
+        background-color: #f9f9f9;
+        margin: 0;
+        padding: 0;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        height: 100vh;
+      }
+
+      #modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.3);
+    backdrop-filter: blur(8px);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.3s ease-in-out;
+  }
+
+  /* Modal Box */
+  #modal {
+    background: linear-gradient(145deg, #ffffff, #e6e6e6);
+    box-shadow: 10px 10px 30px #d9d9d9, -10px -10px 30px #ffffff;
+    border-radius: 20px;
+    padding: 30px;
+    width: 90%;
+    max-width: 400px;
+    text-align: center;
+    transform: translateY(-20px);
+    transition: transform 0.3s ease-in-out;
+  }
+
+  /* Modal Header */
+  .modal-header {
+    font-size: 24px;
+    font-weight: 700;
+    color: #007bff;
+  }
+
+  /* Modal Text */
+  .modal-text {
+    font-size: 16px;
+    color: #333;
+    margin-top: 10px;
+  }
+
+  /* Close Button */
+  .modal-btn {
+    margin-top: 20px;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 30px;
+    font-size: 16px;
+    cursor: pointer;
+    background: linear-gradient(145deg, #0088ff, #0072e6);
+    box-shadow: 5px 5px 15px #0071e3, -5px -5px 15px #008dff;
+    color: white;
+    font-weight: bold;
+    transition: all 0.2s;
+  }
+
+  .modal-btn:hover {
+    background: linear-gradient(145deg, #007bf6, #0068cf);
+    box-shadow: 5px 5px 15px #0066cd, -5px -5px 15px #0080ff;
+  }
+
+  /* Show modal animation */
+  .modal-active {
+    opacity: 1 !important;
+    pointer-events: all !important;
+  }
+
+  .modal-active #modal {
+    transform: translateY(0) !important;
+  }
+
+      #chat-container {
+        width: 100%;
+        max-width: 600px;
+        height: 80vh;
+        border: 1px solid #ccc;
+        border-radius: 8px;
+        background-color: #fff;
+        display: flex;
+        flex-direction: column;
+        overflow: hidden;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        border-radius: 26px;
+background: linear-gradient(145deg, #ffffff, #e6e6e6);
+box-shadow:  20px 20px 60px #d9d9d9,
+             -20px -20px 60px #ffffff;
+      }
+
+      #chatbox {
+        flex: 1;
+        padding: 10px;
+        overflow-y: auto;
+      }
+
+      .message {
+        margin: 5px;
+        padding: 8px 12px;
+        border-radius: 15px;
+        max-width: 75%;
+      }
+
+      .user {
+        align-self: flex-end;
+        background: linear-gradient(145deg, #0088ff, #0072e6);
+        color: #fff;
+      }
+
+      .bot {
+        align-self: flex-start;
+        background-color: #e4e6eb;
+        color: #000;
+      }
+
+      #input-section {
+        display: flex;
+        padding: 10px;
+        border-top: 1px solid #ccc;
+        background-color: #f1f1f1;
+        border-radius: 26px;
+        background: linear-gradient(145deg, #ffffff, #e6e6e6);
+        box-shadow:  13px 13px 31px #e3e3e3,
+             -13px -13px 31px #ffffff;
+      }
+
+      #input-section input {
+        font-family: "League Spartan", serif;
+        font-optical-sizing: auto;
+        flex: 1;
+        padding: 10px;
+        border: 1px solid #ccc;
+        border-radius: 20px;
+        font-size: 16px;
+        border-radius: 39px;
+        
+      }
+
+      #input-section button {
+        margin-left: 10px;
+        padding: 10px 20px;
+        border: none;
+        border-radius: 20px;
+        background-color: #007bff;
+        color: white;
+        font-size: 16px;
+        cursor: pointer;
+        border-radius: 39px;
+background: linear-gradient(145deg, #0088ff, #0072e6);
+box-shadow:  7px 7px 18px #0071e3,
+             -7px -7px 18px #008dff;
+
+             font-family: "League Spartan", serif;
+        font-optical-sizing: auto;
+      }
+
+      #input-section button:hover {
+        border-radius: 39px;
+background: linear-gradient(145deg, #007bf6, #0068cf);
+box-shadow:  7px 7px 18px #0066cd,
+             -7px -7px 18px #0080ff;
+      }
+    </style>
+  </head>
+  <body>
+  <div id="modal-overlay">
+  <div id="modal">
+    <h2 class="modal-header">Welcome</h2>
+    <p class="modal-text">Welcome to my Healthbot :D don't forget to share with your friends and enjoy!</p>
+    <button class="modal-btn" onclick="closeModal()">Close</button>
+  </div>
+</div>
+    <div id="chat-container">
+      <div id="chatbox"></div>
+      <div id="input-section">
+        <input
+          type="text"
+          id="userInput"
+          placeholder="Type your message here..."
+        />
+        <button onclick="sendMessage()">Send</button>
+      </div>
+    </div>
+
+    <script>
+      // Show the modal when the page loads
+      window.onload = function() {
+      document.getElementById('modal-overlay').classList.add('modal-active');
+  };
+
+  // Function to close modal
+  function closeModal() {
+    document.getElementById('modal-overlay').classList.remove('modal-active');
+  }
+
+      const chatbox = document.getElementById('chatbox');
+      let state = {}; // Store session state for the chatbot
+
+      // Function to append messages to the chatbox
+      function appendMessage(text, sender) {
+        const message = document.createElement('div');
+        message.className = `${sender} message`;
+        message.innerText = text;
+        chatbox.appendChild(message);
+        chatbox.scrollTop = chatbox.scrollHeight; // Auto-scroll to the bottom
+      }
+
+      // Function to send the user message to the backend
+      async function sendMessage() {
+        const input = document.getElementById('userInput');
+        const userMessage = input.value.trim();
+        if (!userMessage) return; // Don't send empty messages
+
+        // Display the user message
+        appendMessage(userMessage, 'user');
+        input.value = ''; // Clear the input field
+
+        // Send the message to the backend
+        try {
+          const response = await fetch(
+            'https://1bf3-34-125-145-70.ngrok-free.app/chat/',
+            {
+              method: 'POST', // Must be POST to match the API endpoint
+              headers: {
+                'Content-Type': 'application/json', // Set the correct content type
+              },
+              body: JSON.stringify({ message: userMessage, state: state }), // Send JSON payload
+            }
+          );
+
+          const data = await response.json();
+          appendMessage(data.response, 'bot'); // Display bot response
+          state = data.state; // Update the session state
+        } catch (error) {
+          appendMessage('Oops! Something went wrong. Please try again.', 'bot');
+          console.error('Error communicating with the backend:', error);
+        }
+      }
+    </script>
+  </body>
+</html>
