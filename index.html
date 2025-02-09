@@ -2,7 +2,7 @@
   // Fetch the Ngrok URL dynamically
   async function getNgrokUrl() {
     try {
-      const response = await fetch('http://localhost:8000/get_ngrok_url');
+      const response = await fetch('http://34.82.49.225:8000/get_ngrok_url');
       const data = await response.json();
       return data.ngrok_url; // Return the ngrok public URL
     } catch (error) {
