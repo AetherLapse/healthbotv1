@@ -26,5 +26,5 @@ It allows users to ask health queries and get instant responses, simulating a he
 
 1. **Clone the repository**  
    ```bash
-   git clone https://github.com/yourusername/DocBot.git
-   cd DocBot
+   git clone https://github.com/aetherlapse/healthbotv1.git
+   cd healthbotv1
