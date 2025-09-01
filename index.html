@@ -255,10 +255,11 @@ box-shadow:  7px 7px 18px #0066cd,
           appendMessage(data.response, 'bot'); // Display bot response
           state = data.state; // Update the session state
         } catch (error) {
-          appendMessage('Oops! Something went wrong. Please try again.', 'bot');
+          appendMessage('API Server not connected, Kindly connect and try again.', 'bot');
           console.error('Error communicating with the backend:', error);
         }
       }
     </script>
   </body>
 </html>
+
